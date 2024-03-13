@@ -109,7 +109,8 @@ impl Catalog {
         ParseOptions::new().parse(reader)
     }
 
-    fn insert(&mut self, msg: Message) {
+    /// Insert a message into the catalog.
+    pub fn insert(&mut self, msg: Message) {
         let key = match msg.context {
             Some(ref ctxt) => key_with_context(ctxt, &msg.id),
             None => msg.id.clone(),
@@ -178,15 +179,17 @@ impl Catalog {
     }
 }
 
+/// Message represents a single translation strings
 #[derive(Clone, Debug, Eq, PartialEq)]
-struct Message {
+pub struct Message {
     id: String,
     context: Option<String>,
     translated: Vec<String>,
 }
 
 impl Message {
-    fn new<T: Into<String>>(id: T, context: Option<T>, translated: Vec<T>) -> Self {
+    /// Creates a new message with the given id, context and translations.
+    pub fn new<T: Into<String>>(id: T, context: Option<T>, translated: Vec<T>) -> Self {
         Message {
             id: id.into(),
             context: context.map(Into::into),
